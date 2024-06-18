@@ -51,12 +51,14 @@ $ nmcli device wifi list
 $ nmcli device wifi connect <SSID> password <password>
 ```
 ## Select the mirrors
+See [Mirrors](https://wiki.archlinux.org/title/Mirrors).  
 Get up-to-date some local mirrors.
 ```sh
 $ rankmirrors -n 0 -v /etc/pacman.d/mirrorlist-backup > /etc/pacman.d/mirrorlist
 $ pacman -Syyuu
 ```
 ## Time synchronization
+See [systemd-timesyncd](https://wiki.archlinux.org/title/Systemd-timesyncd).
 ```sh
 $ systemctl start systemd-timesyncd
 $ systemctl enable systemd-timesyncd
@@ -69,3 +71,11 @@ $ timedatectl set-ntp true
 $ os-prober  # should see windows detected
 $ grub-mkconfig -o /boot/grub/grub.cfg
 ```
+## Hibernate
+See [Power management/Suspend and hibernate](https://wiki.archlinux.org/title/Power_management/Suspend_and_hibernate#Pass_hibernate_location_to_initramfs).   
+Edit `/etc/mkinitcpio.conf`.
+- add `resume` to `HOOKS=(...)`
+- `$ mkinitcpio -P`
+Edit `/etc/default/grub`
+- add `resume=UUID=<UUID of swap>` to `GRUB_CMDLINE_LINUX_DEFAULT="..."`
+- `$ grub-mkconfig -o /boot/grub/grub.cfg`
