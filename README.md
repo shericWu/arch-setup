@@ -24,6 +24,8 @@ Additional packages:
 - `man-db`
 - `networkmanager`
 - `amd-ucode` (for amd cpu)
+- `openssh`
+- `pacman-contrib`  (for rankmirrors)
 
 ## 3. Configure the system
 ### 3.3 Time
@@ -38,3 +40,32 @@ Edit `/etc/default/grub`
 - uncomment `GRUB_DISABLE_OS_PROBER=false`
 
 Install grub on `/boot` and generate configuration file.
+
+# Post Installation
+## Network Manager
+See [NetworkManager](https://wiki.archlinux.org/title/NetworkManager).
+```sh
+$ systemctl start NetworkManager
+$ systemctl enable NetworkManager
+$ nmcli device wifi list
+$ nmcli device wifi connect <SSID> password <password>
+```
+## Select the mirrors
+Get up-to-date some local mirrors.
+```sh
+$ rankmirrors -n 0 -v /etc/pacman.d/mirrorlist-backup > /etc/pacman.d/mirrorlist
+$ pacman -Syyuu
+```
+## Time synchronization
+```sh
+$ systemctl start systemd-timesyncd
+$ systemctl enable systemd-timesyncd
+# edit /etc/systemd/timesyncd.conf
+$ systemctl restart systemd-timesyncd
+$ timedatectl set-ntp true
+```
+## Grub and dual-booting
+```sh
+$ os-prober  # should see windows detected
+$ grub-mkconfig -o /boot/grub/grub.cfg
+```
