@@ -122,7 +122,8 @@ $ pacman -S hyprland kitty
     $ pacman -S lib32-nvidia-utils libva-nvidia-driver
     # edit /etc/default/grub
         # add `nvidia_drm.modeset=1` to GRUB_CMDLINE_LINUX_DEFAULT
-        # add nvidia.NVreg_PreserveVideoMemoryAllocations=1 to GRUB_CMDLINE_LINUX_DEFAULT
+        # [Notice: no "nvidia."]
+        # add NVreg_PreserveVideoMemoryAllocations=1 to GRUB_CMDLINE_LINUX_DEFAULT
     $ grub-mkconfig -o /boot/grub/grub.cfg
     # edit /etc/mkinitcpio.conf
         # add `nvidia nvidia_modeset nvidia_uvm nvidia_drm` to MODULES
