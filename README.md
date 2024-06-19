@@ -20,12 +20,16 @@ Also mount the boot partition for windows.
 Edit `/etc/pacman.d/mirrorlist` later.
 ### 2.2 Install essential packages
 Additional packages:
-- `vim`
 - `man-db`
 - `networkmanager`
 - `amd-ucode` (for amd cpu)
 - `openssh`
 - `pacman-contrib`  (for rankmirrors)
+- `git`
+- `sudo`
+- `vi`
+- `vim`
+- `neovim`
 
 ## 3. Configure the system
 ### 3.3 Time
@@ -79,3 +83,13 @@ Edit `/etc/mkinitcpio.conf`.
 Edit `/etc/default/grub`
 - add `resume=UUID=<UUID of swap>` to `GRUB_CMDLINE_LINUX_DEFAULT="..."`
 - `$ grub-mkconfig -o /boot/grub/grub.cfg`
+
+## Add user
+See [User management](https://wiki.archlinux.org/title/Users_and_groups#User_management) and [sudo](https://wiki.archlinux.org/title/sudo).
+```sh
+$ useradd -m -s <shell> <username>
+$ passwd <username>
+$ visudo  # enable "sudo" group and add "Defaults passwd_timeout=0"
+$ groupadd sudo
+$ usermod -aG sudo <username>
+```
