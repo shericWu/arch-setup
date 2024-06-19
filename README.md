@@ -118,10 +118,11 @@ $ pacman -S hyprland kitty
         # uncomment [multilib]
         # uncomment Include = /etc/pacman.d/mirrorlist
     $ pacman -Syu
-    # reboot
+    $ reboot
     $ pacman -S lib32-nvidia-utils libva-nvidia-driver
     # edit /etc/default/grub
         # add `nvidia_drm.modeset=1` to GRUB_CMDLINE_LINUX_DEFAULT
+        # add nvidia.NVreg_PreserveVideoMemoryAllocations=1 to GRUB_CMDLINE_LINUX_DEFAULT
     $ grub-mkconfig -o /boot/grub/grub.cfg
     # edit /etc/mkinitcpio.conf
         # add `nvidia nvidia_modeset nvidia_uvm nvidia_drm` to MODULES
@@ -136,16 +137,11 @@ $ pacman -S hyprland kitty
         cursor {
             no_hardware_cursors = true
         }
-    $ reboot
-    # For VA-API hardware video acceleration
-    
     # For suspend & hibernate
     $ systemctl enable nvidia-suspend.service
     $ systemctl enable nvidia-hibernate.service
     $ systemctl enable nvidia-resume.service
-    # edit /etc/default/grub
-        # add nvidia.NVreg_PreserveVideoMemoryAllocations=1 to GRUB_CMDLINE_LINUX_DEFAULT
-    $ grub-mkconfig -o /boot/grub/grub.cfg
+    $ reboot
 # End for nvidia gpu
 $ Hyprland
 # paste the added lines in hyprland.conf to ~/.config/hypr/hyprland.conf
