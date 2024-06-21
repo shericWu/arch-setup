@@ -28,13 +28,12 @@ Additional packages:
 - `man-db`
 - `networkmanager`
 - `amd-ucode` (for amd cpu)
-- `openssh`
-- `pacman-contrib`  (for rankmirrors)
-- `git`
+- `alsa-utils alsa-plugins alsa-firmware` (for sound)
 - `sudo`
-- `vi`
-- `vim`
-- `neovim`
+- `pacman-contrib`  (for rankmirrors)
+- `openssh git`
+- `vi vim neovim`
+- `tree lshw`
 
 ## 3. Configure the system
 `$ pacman-key --init`
@@ -108,12 +107,25 @@ $ groupadd sudo
 $ usermod -aG sudo <username>
 ```
 
+## Audio
+See [Advanced Linux Sound Architecture](https://wiki.archlinux.org/title/Advanced_Linux_Sound_Architecture).  
+Use alsa, pipewire later.
+```sh
+$ alsactl init
+$ alsamixer
+$ alsactl store
+$ systemctl restart alsa-restore.service
+# create /etc/asound.conf
+    # add `defaults.pcm.card 1`
+    # add `defaults.ctl.card 1`
+```
+
 # Hyprland
 See [Hyprland (arch wiki)](https://wiki.archlinux.org/title/Hyprland) and [Master tutorial (hyprland wiki)](https://wiki.hyprland.org/Getting-Started/Master-Tutorial/)
 ```sh
 $ pacman -S hyprland kitty
 # For nvidia gpu
-    $ pacman -S linux-headers nvidia-dkms nvidia-uitils egl-wayland polkit gtk3
+    $ pacman -S linux-headers nvidia-dkms nvidia-uitils egl-wayland polkit gtk3 gtk4
     # edit /etc/pacman.conf
         # uncomment [multilib]
         # uncomment Include = /etc/pacman.d/mirrorlist
@@ -162,7 +174,8 @@ $ swaync-client --reload config
 
 ### Pipewire
 ```sh
-$ pacman -S pipewire wireplumber
+$ pacman -S pipewire wireplumber pipewire-audio pipewire-alsa pipewire-pulse pipewire-jack
+$ reboot
 ```
 
 ### XDG Desktop Portal
@@ -181,3 +194,20 @@ $ pacman -S polkit-kde-agent
 ```sh
 $ pacman -S qt5-wayland qt6-wayland
 ```
+
+### Firefox
+See [nvidia-vaapi-driver - firefox](https://github.com/elFarto/nvidia-vaapi-driver?tab=readme-ov-file#firefox) and [firerfox - configuration](https://wiki.archlinux.org/title/firefox#Configuration).
+```sh
+$ pacman -S firefox
+    # choose jack2
+# For other language
+$ pacman -S noto-fonts-cjk
+# For Nvidia gpu
+    $ pacman -S ffmpeg
+    # check with $ ffmpeg -hwaccels
+    # enter "about:config" in search bar
+    # edit according to nvidia-vaapi-driver's README
+    # edit /etc/environment
+    # edit /etc/libva.conf
+```
+- Note: If encounter Firefox crashed when playing video, remvoe `env = GBM_BACKEND,nvidia-drm` in `hyprland.conf`
