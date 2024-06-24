@@ -1,10 +1,22 @@
 # Install Arch Linux
 Follow [the installation guide](https://wiki.archlinux.org/title/Installation_guide). Take this as additional information.  
 Information about my laptop:
-- 2 SSDs.
-- Have an existing Windows 10 on one SSD.
-- Installing Arch on the other one.
-- Use UEFI.
+- Dual boot with windows on one SSD and arch on the other.
+- Use UEFI
+
+Result:
+- Distribution: Arch
+- Window Manager: Hyprland
+  - Terminal: kitty
+  - File Manager: yazi
+  - Text Editor: Neovim
+  - Browser: Firefox
+  - Image Viewer: imv
+- Display Manager: SDDM
+- Audio
+  - Drivers: ALSA
+  - Sound Servers: PipeWire
+- Firewall: UFW
 
 ## 1. Pre-installation
 ### 1.9 Partition the disk
@@ -25,7 +37,7 @@ Edit `/etc/pacman.d/mirrorlist` later.
 
 ### 2.2 Install essential packages
 Additional packages:
-- `man-db`
+- `man-db tldr`
 - `networkmanager`
 - `amd-ucode` (for amd cpu)
 - `alsa-utils alsa-plugins alsa-firmware` (for sound)
@@ -34,6 +46,7 @@ Additional packages:
 - `openssh git`
 - `vi vim neovim`
 - `tree lshw`
+- `unzip`
 
 ## 3. Configure the system
 `$ pacman-key --init`
@@ -120,6 +133,16 @@ $ systemctl restart alsa-restore.service
     # add `defaults.ctl.card 1`
 ```
 
+## Firewall
+See [Uncomplicated Firewall](https://wiki.archlinux.org/title/Uncomplicated_Firewall).
+```sh
+$ pacman -S ufw
+$ systemctl start ufw.service
+$ systemctl enable ufw.service
+$ ufw enable
+$ ufw status
+```
+
 # Hyprland
 See [Hyprland (arch wiki)](https://wiki.archlinux.org/title/Hyprland) and [Master tutorial (hyprland wiki)](https://wiki.hyprland.org/Getting-Started/Master-Tutorial/)
 ```sh
@@ -195,7 +218,8 @@ $ pacman -S polkit-kde-agent
 $ pacman -S qt5-wayland qt6-wayland
 ```
 
-### Firefox
+## Others
+### Firefox (browser)
 See [nvidia-vaapi-driver - firefox](https://github.com/elFarto/nvidia-vaapi-driver?tab=readme-ov-file#firefox) and [firerfox - configuration](https://wiki.archlinux.org/title/firefox#Configuration).
 ```sh
 $ pacman -S firefox
@@ -211,3 +235,62 @@ $ pacman -S noto-fonts-cjk
     # edit /etc/libva.conf
 ```
 - Note: If encounter Firefox crashed when playing video, remvoe `env = GBM_BACKEND,nvidia-drm` in `hyprland.conf`
+
+### Yay (aur helper)
+See [Yay](https://github.com/Jguer/yay).
+```sh
+$ pacman -S git base-devel
+$ mkdir Programs
+$ cd Programs
+$ git clone https://aur.archlinux.org/yay.git
+$ cd yay
+$ makepkg -si
+$ yay -Y --gendb
+$ yay -Syu --devel
+$ yay -Y --devel --save
+```
+### Display manager
+#### SDDM (tried but not used)
+See [SDDM](https://wiki.archlinux.org/title/SDDM), theme modified from [Blue Archive theme login theme for SDDM](https://github.com/Machillka/Arona-sddm-login).
+```sh
+$ pacman -S sddm
+$ systemctl enable sddm.service
+$ yay -S archlinux-themes-sddm
+$ pacman -S --needed qt5‑graphicaleffects qt5‑quickcontrols2 qt5‑svg
+# clone the theme and place under /usr/share/sddm/themes/
+$ mkdir /etc/sddm.conf.d
+$ touch /etc/sddm.conf.d/hyprland.conf
+# edit /etc/sddm.conf.d/hyprland.conf
+```
+
+#### Greetd + tuigreet (display manager)
+```sh
+$ pacman -S greetd greetd-tuigreet
+# disable sddm
+$ systemctl enable greetd.service
+# configure /etc/greetd/config.toml
+```
+
+### imv (image viewer)
+See [imv](https://sr.ht/~exec64/imv/).
+```sh
+$ pacman -S imv
+```
+
+### yazi (file manager)
+```sh
+$ pacman -S yazi ffmpegthumbnailer unarchiver jq poppler fd ripgrep fzf zoxide ttf-dejavu ttf-dejavu-nerd
+```
+
+### kitty
+```sh
+$ cp /usr/share/doc/kitty/kitty.conf ~/.config/kitty
+```
+
+# Misc
+See [10 Things to Do After Installing Arch Linux (2023)](https://www.youtube.com/watch?v=V7ABBlXcn0g).
+## Pacman
+Edit `/etc/pacman.conf`
+- Uncomment `Color`
+- Add `ILoveCandy`
+- Uncomment `ParallelDownloads`
